@@ -1,55 +1,85 @@
 # core_ui
 
-Package Dart fondasi antarmuka untuk super app Gumpalan: palet warna resmi, konfigurasi `ThemeData` terang dan gelap, serta kontrak modular `AppModule`.
+Paket fondasi desain dan antarmuka untuk ekosistem super app Gumpalan: palet warna resmi, konfigurasi `ThemeData` mode terang dan gelap, serta kontrak antarmuka modular `AppModule`.
 
-## Struktur
+Paket ini menjamin konsistensi visual dan perutean standar di seluruh modul aplikasi.
 
+---
+
+## Struktur Direktori
+
+```text
+app-core-ui/
+├── lib/
+│   ├── core_ui.dart              # Export publik paket
+│   └── src/
+│       ├── app_module.dart       # Kontrak antarmuka modul fitur
+│       ├── theme/
+│       │   ├── app_theme.dart    # Konfigurasi tema terang & gelap Material 3
+│       │   └── colors.dart       # Palet warna primer, sekunder, dan netral
+│       └── widgets/              # Komponen widget bersama (shared components)
+└── test/
+    └── core_ui_test.dart         # Pengujian integritas palet warna dan tema
 ```
-lib/
-├── core_ui.dart
-└── src/
-    ├── app_module.dart            # Kontrak abstrak modul aplikasi
-    ├── theme/
-    │   ├── app_theme.dart         # Konfigurasi ThemeData terang dan gelap
-    │   └── colors.dart            # Definisi konstanta palet warna Gumpalan
-    └── widgets/
-        └── .gitkeep
-```
+
+---
 
 ## Palet Warna Gumpalan
 
-- `background`: `#8BE04E`
-- `dark`: `#0B1410`
-- `darkGreen900`: `#14452A`
-- `darkGreen800`: `#1F6B3A`
-- `green700`: `#2E9C4A`
-- `green500`: `#5FD068`
-- `creamLight`: `#F2FFC4`
-- `cream`: `#D9FF8A`
+Konstanta warna diakses melalui kelas `GumpalanColors`:
 
-## Kontrak AppModule
+| Nama Properti | Kode Hex | Deskripsi Penggunaan |
+| --- | --- | --- |
+| `background` | `#8BE04E` | Aksen hijau khas Gumpalan |
+| `dark` | `#0B1410` | Latar belakang mode gelap |
+| `darkGreen900` | `#14452A` | Elemen permukaan gelap dan kontras |
+| `darkGreen800` | `#1F6B3A` | Border dan aksen sekunder gelap |
+| `green700` | `#2E9C4A` | Warna primer tombol dan tindakan aktif |
+| `green500` | `#5FD068` | Indikator status sukses/aktif |
+| `creamLight` | `#F2FFC4` | Permukaan terang dan kartu |
+| `cream` | `#D9FF8A` | Latar belakang aksen terang |
 
-Setiap modul fitur (`app-mod-*`) wajib mengimplementasikan antarmuka `AppModule`:
+---
+
+## Kontrak `AppModule`
+
+Setiap modul fitur (`app-mod-*`) wajib mengimplementasikan antarmuka `AppModule` agar dapat dikenali dan dipasang oleh `app-shell`:
 
 ```dart
 abstract class AppModule {
+  /// Pengenal unik modul (misal: 'iot', 'chat', 'settings').
   String get id;
+
+  /// Nama tampilan modul yang ramah pengguna.
   String get name;
+
+  /// Ikon representasi modul pada navigasi antarmuka.
   IconData get icon;
+
+  /// Daftar definisi rute GoRouter yang didaftarkan ke router utama.
   List<RouteBase> get routes;
+
+  /// Widget kartu ringkasan untuk beranda komposit (opsional).
   Widget? get homeCard;
+
+  /// Tampilan layar utama modul ketika aktif sebagai modul utama.
+  Widget get homeScreen;
 }
 ```
 
+---
+
+## Pengujian Otomatis
+
+Jalankan pengujian unit antarmuka:
+
+```bash
+flutter test
+```
+
+---
+
 ## Lisensi dan Dependensi
 
-Lisensi repositori ini **belum ditentukan**.
-
-### Dependensi Langsung:
 - `go_router` (BSD-3-Clause) - Pustaka perutean deklaratif Flutter.
-
-### Memeriksa Lisensi:
-Periksa berkas `pubspec.lock` atau gunakan perintah:
-```bash
-flutter pub pub run -- flutter pub deps
-```
+- `flutter` SDK (BSD-3-Clause) - Framework inti UI Flutter.
